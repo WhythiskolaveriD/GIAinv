@@ -1,18 +1,33 @@
 function [GIA_svd,Mask_Syn_Data,tf_GIA] = GIA_inv_GPS_GRACE(GRACEtrend,GPStrend,loc_GPS_data,sw,Purc_or_Wahr,prior_model,v_or_e,lmax)
 %  GIA_inv_GPS_GRACE implements a novel GIA inversion method that uses contemporary EO data (doi: xxxxx)
 %% Input:
-% GRACEtrend: Synthetic GRACE data
+% GRACEtrend: GRACE SH trend in |c\s| format. example of the format:
+%        col 1  col 2   col 3   col 4   col 5
+%row 1:   C_00   S_11    S_21    S_31    S_41
+%row 2:   C_10   C_11    S_22    S_32    S_42
+%row 3:   C_20   C_21    C_22    S_33    S_43
+%row 4:   C_30   C_31    C_32    C_33    S_44
+%row 5:   C_40   C_41    C_42    C_43    C_44
+
 % GPStrend: nx1 vector containing linear trends in GPS data at n locations. The corodicnates of these locations is provided in the next input, loc_GPS
-% loc_GPS: a n x 2 vector with first column containing latitutes and second column containing longitudes
-% sw: The grid space between synthetic data sets, we recommend a value of 5
-% Purc_or_Wahr: '1' if you want to use relation between VLM and geopotential as provided by Purcell et al 2011, and '2' when you you want to use the relation from Wahr et al 2000 relation.
+
+% loc_GPS: locationof the GNSS stations, a n x 2 vector with first column containing latitutes and second column containing longitudes
+
+% sw: The grid space between synthetic data points in degrees, we recommend 5
+
+% Purc_or_Wahr: Which relation you want to follow: '1' if you want to use relation between VLM and geopotential as provided by Purcell et al 2011, and '2' when you you want to use the relation from Wahr et al 2000 relation.
+
 % prior_model: A GIA model that could be used as a prior and that will help in generating synthetic GNSS dataset.
-% v_or_e: '1' if you want to estimate GIA, '2' if you want to estimate PDSMC trends.
+
+% v_or_e: viscous (GIA) component or elastic (PDSMC), '1' if you want to estimate GIA, '2' if you want to estimate PDSMC trends.
+
 % lmax: maximum degree upto which you want to estimate GIA or PDSMC SH coefficients. The maximum value for lmax is dependent of sw, and for sw of 5 lmax should be no more than 40. We recommend 35.
 
 %% Output
 % GIA_svd: GIA field obtained without prior
+
 % Mask_Syn_Data: grid map of locations that have been augmented with the synthetic data.
+
 % tf_GIA: transfer function to convert GIA geopotential to VLM.
 
 %% External files/functions used in this function
