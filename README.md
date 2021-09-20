@@ -4,4 +4,5 @@
 # to help with a trial run we also provide some sample data (such as Caron_stokes.mat, ICE_6GD_stokes.mat, GRACE_trebd_Data.mat, GPSloc_vec.mat, and GPS_trend_vec.mat)
 # User may follow the example in GIA_inv_GPS_GRACE.m to obtain a GIA field or PDSMC field from the dataset.
 # the file: GIA_output_GNSS_GRACE_ice6G_purcell.mat contains the GIA field that we obtained for the publication.
+# the file GIA_VLM_1deg.nc contains the high resolution GIA field that is obtained by applying the forward modelling approach (by Chen et al., 2015) on the GIA field GIA_output_GNSS_GRACE_ice6G_purcell.mat
 # please cite the relevant publication when using this work.
