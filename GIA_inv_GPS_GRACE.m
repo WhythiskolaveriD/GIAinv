@@ -126,7 +126,7 @@ GPS_eq = GRACEtr_e/1000 + GIA_v; % in meters
 
 %% transfer functions that relate elastic or viscous VLM with geopotential and EWH with geopotential
 constants;
-[klGIA,hlGIA,~] = lovenrprem(0:lmax,'CM');
+[klGIA,hlGIA,~] = lovenrprem(0:lmax,'CF');
 fPurc = (1.1677*(0:lmax) - 0.5233);
 if Purc_or_Wahr == 1
     if v_or_e == 1
@@ -279,13 +279,24 @@ Acnstrn = zeros(4,cA);
 Acnstrn(1,1) = 1; Acnstrn(2,2) = 1; Acnstrn(3,lmax+2) = 1; Acnstrn(4,(2*lmax)+2) = 1;
 
 if v_or_e == 1
-Y_empty = [GPS_vs - GRACE_eq_empty;0;0;0;0];
+Y_empty = [GPS_vs - GRACE_eq_empty];
 A = [Amat;Amat_e;Acnstrn]; % design matrix
+
+Y = [Y;Y_empty];
+
+% uncomment the following when running the code in loop for a MC experiment
+% a = 0.2;
+% b = -0.2;
+% r = (b-a).*rand(size(Y)) + a;
+% Y = Y + (r).*Y;
+
+Y = [Y;0;0;0;0]; % observation vector
 else
     Y_empty = [GPS_vs - GRACE_eq_empty];
     A = [Amat;Amat_e]; % design matrix
+    Y = [Y;Y_empty]; 
 end
-Y = [Y;Y_empty]; % observation vector
+
 
 [U,S,V] = svd(A);
 iS = pinv(S);
